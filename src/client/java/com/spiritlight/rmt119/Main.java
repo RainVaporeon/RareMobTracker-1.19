@@ -6,12 +6,15 @@ import com.spiritlight.rmt119.commands.internal.CommandManager;
 import com.spiritlight.rmt119.config.Config;
 import com.spiritlight.rmt119.events.bus.EventBus;
 import com.spiritlight.rmt119.events.bus.EventBusAdapter;
+import com.spiritlight.rmt119.events.game.ClientTickEndEvent;
 import com.spiritlight.rmt119.events.game.RunnableExecutionEvent;
 import com.spiritlight.rmt119.events.handlers.EntityTrackingHandler;
 import net.fabricmc.api.ClientModInitializer;
 
-import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Main extends EventBusAdapter implements ClientModInitializer {
 
@@ -36,14 +39,24 @@ public class Main extends EventBusAdapter implements ClientModInitializer {
 		CommandManager.instance.addCommand(new RMTCommand());
 	}
 
+	private final Queue<Runnable> runnableQueue = new ConcurrentLinkedQueue<>();
+
 	@Override
 	public void onRunnableExecution(RunnableExecutionEvent event) {
 		if(event.checkKey(EXECUTION_KEY)) {
 			try {
-				event.getRunnable(EXECUTION_KEY).run();
+				runnableQueue.add(event.getRunnable(EXECUTION_KEY));
 			} catch (IllegalArgumentException ex) {
 				Loggers.getThreadLogger().warn("Can't retrieve runnable from valid key " + EXECUTION_KEY);
 			}
 		}
+	}
+
+	@Override
+	public void onClientTickEnd(ClientTickEndEvent event) {
+		for(Runnable runnable : runnableQueue) {
+			runnable.run();
+		}
+		runnableQueue.clear();
 	}
 }

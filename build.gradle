@@ -26,7 +26,6 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-
 loom {
     splitEnvironmentSourceSets()
 
@@ -41,7 +40,7 @@ loom {
 
 configurations {
 	shade
-	compile.extendsFrom(shade)
+	implementation.extendsFrom(shade)
 }
 
 dependencies {
@@ -59,7 +58,7 @@ dependencies {
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 
 	// https://search.maven.org/artifact/com.fasterxml.jackson.core/jackson-databind/2.14.0-rc2/bundle
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
+	shade 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
 
 }
 
@@ -88,5 +87,9 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	from {
+		configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
 	}
 }

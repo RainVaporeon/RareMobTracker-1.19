@@ -46,7 +46,7 @@ public class EntityTrackingHandler extends EventBusAdapter {
         if(entity instanceof ServerPlayerEntity) {
             if(!Main.config.doSeekPlayer()) return;
 
-            playAlertSound();
+            playAlertSoundConcurrent();
 
             Text text = this.setClickableStyle(this.getMobAlert(
                     Type.PLAYER, entityName, blockX, blockY, blockZ
@@ -57,7 +57,7 @@ public class EntityTrackingHandler extends EventBusAdapter {
         }
         if(entity instanceof PlayerEntity) return;
         if(Main.config.getSeekNames().stream().anyMatch(name -> entityName.toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)))) {
-            playAlertSound();
+            playAlertSoundConcurrent();
 
             entity.setGlowing(true);
 
@@ -74,7 +74,7 @@ public class EntityTrackingHandler extends EventBusAdapter {
         // Assume rare
 
         if(Main.config.getIgnoredNames().stream().noneMatch(name -> entityName.toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)))) {
-            playAlertSound();
+            playAlertSoundConcurrent();
 
             entity.setGlowing(true);
 
@@ -90,6 +90,10 @@ public class EntityTrackingHandler extends EventBusAdapter {
         EventBus.instance.fire(new RunnableExecutionEvent(Main.EXECUTION_KEY, () -> {
             entity.sendMessage(message);
         }));
+    }
+
+    private void playAlertSoundConcurrent() {
+        EventBus.instance.fire(new RunnableExecutionEvent(Main.EXECUTION_KEY, this::playAlertSound));
     }
 
     private void playAlertSound() {

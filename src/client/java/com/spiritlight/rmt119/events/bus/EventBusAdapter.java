@@ -2,6 +2,7 @@ package com.spiritlight.rmt119.events.bus;
 
 import com.spiritlight.rmt119.events.Event;
 import com.spiritlight.rmt119.events.game.ClientCommandInitializationEvent;
+import com.spiritlight.rmt119.events.game.ClientTickEndEvent;
 import com.spiritlight.rmt119.events.game.RunnableExecutionEvent;
 import com.spiritlight.rmt119.events.game.entity.EntityTrackingEvent;
 
@@ -19,6 +20,10 @@ public class EventBusAdapter implements IEventBusSubscriber {
 
     }
 
+    public void onClientTickEnd(ClientTickEndEvent event) {
+
+    }
+
     @Override
     public final void onEvent(Event event) {
         if(event instanceof EntityTrackingEvent e) {
@@ -29,6 +34,9 @@ public class EventBusAdapter implements IEventBusSubscriber {
         }
         if(event instanceof RunnableExecutionEvent e) {
             this.onRunnableExecution(e);
+        }
+        if(event instanceof ClientTickEndEvent e) {
+            this.onClientTickEnd(e);
         }
     }
 }
