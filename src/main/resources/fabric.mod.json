@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "rmt-port",
+	"version": "${version}",
+	"name": "rmt-port",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/rmt-port/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.spiritlight.rmt119.ExampleMod"
+		],
+		"client": [
+          "com.spiritlight.rmt119.Main"
+		]
+	},
+	"mixins": [
+		"rmt-port.mixins.json",
+		{
+			"config": "rmt-port.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.19.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
