@@ -15,3 +15,8 @@ but for any problems you encounter is yours, I won't be helping you out on that.
 - Check if rare mob (either the tag or by name)
 - - Optional: Add a whitelist for mobs you are interested in but is not a rare mob!
 - Process it accordingly!
+
+
+
+
+-# psst, this might come in handy for you 1.21 developers: `-18, -128, -86`
